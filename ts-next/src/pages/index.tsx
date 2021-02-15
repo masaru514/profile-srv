@@ -158,4 +158,3 @@ const Activity = () => {
 	)
 }
 
-{/* <Checkbox checked={select} key={id} name="name" /> */ }
