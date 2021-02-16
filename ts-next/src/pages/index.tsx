@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -7,6 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Grid } from '@material-ui/core';
+import { render } from 'react-dom';
 
 export default function Home() {
 	return (
@@ -26,6 +28,8 @@ export default function Home() {
 				<TwitterStyles />
 				<h3>Twitter活動時間</h3>
 				<Activity />
+				<h3>画像をアップロード</h3>
+				<FileUpload />
 			</section>
 		</div>
 	);
@@ -40,6 +44,10 @@ type Selectors = {
 	select: string,
 	name: string,
 	id: string
+}
+
+type FileData = {
+	imagePreviewUrl: string | undefined,
 }
 
 const Interesting = () => {
@@ -70,6 +78,7 @@ const Interesting = () => {
 					<FormControlLabel
 						control={<Checkbox name="select" />}
 						label={select}
+						key={id}
 					/>
 				))}
 			</FormGroup>
@@ -100,13 +109,13 @@ const Foods = () => {
 					<FormControlLabel
 						control={<Checkbox name="select" />}
 						label={select}
+						key={id}
 					/>
 				))}
 			</FormGroup>
 		</FormControl>
 	)
 }
-
 const TwitterStyles = () => {
 	const StylesArray: Selectors[] = [
 		{ select: "ツイート多め", name: "inerest", id: "1" },
@@ -125,13 +134,13 @@ const TwitterStyles = () => {
 					<FormControlLabel
 						control={<Checkbox name="select" />}
 						label={select}
+						key={id}
 					/>
 				))}
 			</FormGroup>
 		</FormControl>
 	)
 }
-
 const Activity = () => {
 	const ActivityArray: Selectors[] = [
 		{ select: "朝", name: "inerest", id: "1" },
@@ -151,10 +160,35 @@ const Activity = () => {
 					<FormControlLabel
 						control={<Checkbox name="select" />}
 						label={select}
+						key={id}
 					/>
 				))}
 			</FormGroup>
 		</FormControl >
 	)
 }
+const FileUpload = () => {
+	const [fileData, setFileData] = useState<FileData>({
+		imagePreviewUrl: '',
+	})
 
+	function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const image = e.target.files && e.target.files[0]
+		if (!image) return
+		let reader = new FileReader()
+		reader.onload = () => {
+			console.log("発火")
+			setFileData({
+				imagePreviewUrl: reader.result as string
+			})
+		}
+		reader.readAsDataURL(image)
+	}
+
+	return (
+		<div>
+			<input id="file" type="file" accept=".png,.jpg,.jpeg" onChange={e => onChange(e)} />
+			<img src={fileData.imagePreviewUrl} alt="" />
+		</div>
+	)
+}
