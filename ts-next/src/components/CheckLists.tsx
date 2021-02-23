@@ -14,15 +14,23 @@ type Selectors = {
   id: string
 }
 
-export default function CheckLists({ array }: { array: Selectors[] }) {
+export default function CheckLists(props: {
+  array: Selectors[],
+  addCheckedElement: (e: HTMLINputElement) => void
+}) {
+  const { array, addCheckedElement } = props
   return (
     <FormControl>
       <FormGroup style={grid}>
         {array.map(({ select, name, id }) => (
           <FormControlLabel
-            control={<Checkbox name={name} />}
+            control={<Checkbox name={name} value={select} />}
             label={select}
             key={id}
+            onChange={(e) => {
+              const el = e.target as HTMLInputElement
+              addCheckedElement(el)
+            }}
           />
         ))}
       </FormGroup>
