@@ -17,6 +17,13 @@ type Selectors = {
 	id: string
 }
 
+interface Data {
+	[interest: string]: string[],
+	food: string[],
+	style: string[],
+	activity: string[],
+}
+
 const Img = styled.img`
   width: 300px;
 `
@@ -52,7 +59,7 @@ const FileUpload = () => {
 }
 
 export default function Home() {
-	const [data, setData] = useState({
+	const [data, setData] = useState<Data>({
 		interest: [],
 		food: [],
 		style: [],
@@ -63,7 +70,7 @@ export default function Home() {
 		const dataKey = data[e.name]
 		const array = []
 		if (dataKey.includes(e.value)) {
-			const newArr = dataKey.filter(item => item !== e.value)
+			const newArr = dataKey.filter((item: string) => item !== e.value)
 			setData({ ...data, [e.name]: newArr })
 		} else {
 			array.push(e.value)
