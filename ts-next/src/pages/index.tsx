@@ -1,6 +1,8 @@
+import axios from 'axios'
 import Head from 'next/head'
 import { useState } from 'react'
 import styled from 'styled-components'
+// eslint-disable-next-line import/extensions
 import CheckLists from '../components/CheckLists'
 
 const marginBottom = {
@@ -23,6 +25,10 @@ interface Data {
 	style: string[],
 	activity: string[],
 }
+
+// interface post {
+// 	responseType: ArrayBuffer
+// }
 
 const Img = styled.img`
   width: 300px;
@@ -66,6 +72,8 @@ export default function Home() {
 		activity: [],
 	})
 
+	const [imageData, setImageData] = useState<string>('')
+
 	function addCheckedElement(e: HTMLInputElement): void {
 		const dataKey = data[e.name]
 		const array = []
@@ -78,6 +86,15 @@ export default function Home() {
 			setData({ ...data, [e.name]: newArr })
 		}
 		console.log(data)
+	}
+
+	async function generateImage() {
+		console.log('生成開始')
+		const apiUrl = ('http://localhost:3000/api/hello')
+		const getImage = await axios.get(apiUrl, { responseType: 'blob' })
+		const blob = window.URL.createObjectURL(getImage.data)
+		console.log(blob)
+		setImageData(blob)
 	}
 
 	const interestArray: Selectors[] = [
@@ -146,16 +163,17 @@ export default function Home() {
 			<section style={marginBottom}>
 				<h2>自己紹介カード</h2>
 				<h3>興味のあるもの</h3>
-				<CheckLists addCheckedElement={e => addCheckedElement(e)} array={interestArray} />
+				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={interestArray} />
 				<h3>好きなたべもの</h3>
-				<CheckLists addCheckedElement={e => addCheckedElement(e)} array={foodsArray} />
+				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={foodsArray} />
 				<h3>Twitterのスタイル</h3>
-				<CheckLists addCheckedElement={e => addCheckedElement(e)} array={StylesArray} />
+				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={StylesArray} />
 				<h3>Twitter活動時間</h3>
-				<CheckLists addCheckedElement={e => addCheckedElement(e)} array={ActivityArray} />
+				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={ActivityArray} />
 				<h3>画像をアップロード</h3>
 				<FileUpload />
-				<button onClick={() => console.log("テスト")}>画像を生成する</button>
+				<button onClick={() => generateImage()}>画像を生成する</button>
+				<img id="image" src={imageData} alt="" />
 			</section>
 		</div>
 	)

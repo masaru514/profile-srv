@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@material-ui/core": "4.11.3",
+    "axios": "0.21.1",
     "canvas": "2.6.1",
     "express": "4.17.1",
     "next": "10.0.6",

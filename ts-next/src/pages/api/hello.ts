@@ -14,10 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const ctx = canvas.getContext('2d')
   const backgroundImage = await loadImage(path.resolve('./src/image/image.png'))
-  console.log(backgroundImage)
   ctx.drawImage(backgroundImage, DX, DY, WIDTH, HEIGHT)
-  // ctx.fillStyle = '#FFF'
-  // ctx.fillRect(DX, DY, WIDTH, HEIGHT)
 
   registerFont(path.resolve('./font/ipaexg.ttf'), {
     family: 'ipagp',
@@ -29,7 +26,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   ctx.fillText('チョッパーかわいい', 600, 300)
 
   const buffer = canvas.toBuffer()
-
   res.writeHead(200, {
     'Content-Type': 'image/png',
     'Content-Length': buffer.length,
