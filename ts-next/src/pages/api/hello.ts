@@ -6,6 +6,8 @@ const path = require('path')
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const imagePath = req.body
+  console.log(imagePath)
   const WIDTH = 1200 as const
   const HEIGHT = 630 as const
   const DX = 0 as const

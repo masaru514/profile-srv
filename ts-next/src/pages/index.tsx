@@ -2,7 +2,6 @@ import axios from 'axios'
 import Head from 'next/head'
 import { useState } from 'react'
 import styled from 'styled-components'
-// eslint-disable-next-line import/extensions
 import CheckLists from '../components/CheckLists'
 
 const marginBottom = {
@@ -26,43 +25,9 @@ interface Data {
 	activity: string[],
 }
 
-// interface post {
-// 	responseType: ArrayBuffer
-// }
-
 const Img = styled.img`
   width: 300px;
 `
-
-const FileUpload = () => {
-	const [fileData, setFileData] = useState<FileData>({
-		imagePreviewUrl: '',
-	})
-
-	function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const image = e.target.files && e.target.files[0]
-		if (!image) return
-		const reader = new FileReader()
-		reader.onload = () => {
-			setFileData({
-				imagePreviewUrl: reader.result as string,
-			})
-		}
-		reader.readAsDataURL(image)
-	}
-
-	return (
-		<div>
-			<input
-				id="file"
-				type="file"
-				accept=".png,.jpg,.jpeg"
-				onChange={(e) => onChange(e)}
-			/>
-			<Img src={fileData.imagePreviewUrl} alt="" />
-		</div>
-	)
-}
 
 export default function Home() {
 	const [data, setData] = useState<Data>({
@@ -72,7 +37,50 @@ export default function Home() {
 		activity: [],
 	})
 
-	const [imageData, setImageData] = useState<string>('')
+	const [fileData, setFileData] = useState<FileData>({
+		imagePreviewUrl: '',
+	})
+
+	async function generateImage(image: File) {
+		console.log('生成開始')
+		console.log(image)
+		const apiUrl = ('http://localhost:3000/api/hello')
+		const getImage = await axios.post(apiUrl, image)
+		// const blob = window.URL.createObjectURL(getImage.data)
+		// console.log(blob)
+		setFileData({ imagePreviewUrl: blob })
+	}
+
+	const FileUpload = () => {
+		function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+			const image = e.target.files && e.target.files[0]
+			if (!image) return
+
+			// apiに画像を送って処理をしたい
+			generateImage(image)
+
+			// ここでブラウザ側の読み込みの処理をしている
+			const reader = new FileReader()
+			reader.onload = () => {
+				setFileData({
+					imagePreviewUrl: reader.result as string,
+				})
+			}
+			reader.readAsDataURL(image)
+		}
+
+		return (
+			<div>
+				<input
+					id="file"
+					type="file"
+					accept=".png,.jpg,.jpeg"
+					onChange={(e) => onChange(e)}
+				/>
+				<Img src={fileData.imagePreviewUrl} alt="" />
+			</div>
+		)
+	}
 
 	function addCheckedElement(e: HTMLInputElement): void {
 		const dataKey = data[e.name]
@@ -88,14 +96,6 @@ export default function Home() {
 		console.log(data)
 	}
 
-	async function generateImage() {
-		console.log('生成開始')
-		const apiUrl = ('http://localhost:3000/api/hello')
-		const getImage = await axios.get(apiUrl, { responseType: 'blob' })
-		const blob = window.URL.createObjectURL(getImage.data)
-		console.log(blob)
-		setImageData(blob)
-	}
 
 	const interestArray: Selectors[] = [
 		{ select: 'アウトドア', name: 'interest', id: '1' },
@@ -173,7 +173,6 @@ export default function Home() {
 				<h3>画像をアップロード</h3>
 				<FileUpload />
 				<button onClick={() => generateImage()}>画像を生成する</button>
-				<img id="image" src={imageData} alt="" />
 			</section>
 		</div>
 	)
