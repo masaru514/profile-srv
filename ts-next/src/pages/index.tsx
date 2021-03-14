@@ -41,14 +41,11 @@ export default function Home() {
 		imagePreviewUrl: '',
 	})
 
-	async function generateImage(image: File) {
+	async function generateImage(image: string) {
 		console.log('生成開始')
-		console.log(image)
-		const apiUrl = ('http://localhost:3000/api/hello')
-		const getImage = await axios.post(apiUrl, image)
-		// const blob = window.URL.createObjectURL(getImage.data)
-		// console.log(blob)
-		setFileData({ imagePreviewUrl: blob })
+		// const apiUrl = ('http://localhost:3000/api/generateImage')
+		// const getImage = await axios.post(apiUrl, image)
+		// setFileData({ imagePreviewUrl: getImage.data })
 	}
 
 	const FileUpload = () => {
@@ -56,17 +53,26 @@ export default function Home() {
 			const image = e.target.files && e.target.files[0]
 			if (!image) return
 
-			// apiに画像を送って処理をしたい
-			generateImage(image)
-
 			// ここでブラウザ側の読み込みの処理をしている
 			const reader = new FileReader()
 			reader.onload = () => {
-				setFileData({
-					imagePreviewUrl: reader.result as string,
-				})
+				if (!reader.result) return
+				// generateImage(reader.result)
+				const canvas = document.getElementById('canvas')
+				const ctx = canvas.getContext('2d')
+				let img = new Image()
+				img.src = reader.result
+				img.onload = () => {
+					ctx.drawImage(img, 0, 0)
+				}
+
+				// useStateに保存
+				// setFileData({
+				// 	imagePreviewUrl: reader.result as string,
+				// })
 			}
 			reader.readAsDataURL(image)
+			console.log("local 到達")
 		}
 
 		return (
@@ -77,7 +83,7 @@ export default function Home() {
 					accept=".png,.jpg,.jpeg"
 					onChange={(e) => onChange(e)}
 				/>
-				<Img src={fileData.imagePreviewUrl} alt="" />
+				<Img id="image" src={fileData.imagePreviewUrl} alt="" />
 			</div>
 		)
 	}
@@ -172,6 +178,7 @@ export default function Home() {
 				<CheckLists addCheckedElement={addCheckedElement} array={ActivityArray} />
 				<h3>画像をアップロード</h3>
 				<FileUpload />
+				<canvas id="canvas"></canvas>
 				<button onClick={() => generateImage()}>画像を生成する</button>
 			</section>
 		</div>
