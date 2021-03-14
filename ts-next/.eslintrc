@@ -14,8 +14,8 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "plugins": ["import", "jsx-a11y", "react", "react-hooks", "prettier"],
-  "extends": ["airbnb", "eslint-config-prettier", "prettier/react"],
+  "plugins": ["import", "jsx-a11y", "react", "react-hooks", "prettier", "@typescript-eslint"],
+  "extends": ["airbnb", "eslint-config-prettier", "prettier/react", "eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:@typescript-eslint/recommended-requiring-type-checking", "plugin:prettier/recommended"],
   "rules": {
     "prettier/prettier": "error",
     "camelcase": "off",
@@ -78,7 +78,7 @@
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": "."
+        "project": "./tsconfig.eslint.json"
       },
     },
     "react": {

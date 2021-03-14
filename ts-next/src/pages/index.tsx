@@ -163,13 +163,13 @@ export default function Home() {
 			<section style={marginBottom}>
 				<h2>自己紹介カード</h2>
 				<h3>興味のあるもの</h3>
-				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={interestArray} />
+				<CheckLists addCheckedElement={addCheckedElement} array={interestArray} />
 				<h3>好きなたべもの</h3>
-				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={foodsArray} />
+				<CheckLists addCheckedElement={addCheckedElement} array={foodsArray} />
 				<h3>Twitterのスタイル</h3>
-				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={StylesArray} />
+				<CheckLists addCheckedElement={addCheckedElement} array={StylesArray} />
 				<h3>Twitter活動時間</h3>
-				<CheckLists addCheckedElement={(e) => addCheckedElement(e)} array={ActivityArray} />
+				<CheckLists addCheckedElement={addCheckedElement} array={ActivityArray} />
 				<h3>画像をアップロード</h3>
 				<FileUpload />
 				<button onClick={() => generateImage()}>画像を生成する</button>

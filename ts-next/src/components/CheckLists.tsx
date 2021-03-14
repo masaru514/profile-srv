@@ -14,10 +14,12 @@ type Selectors = {
   id: string
 }
 
-export default function CheckLists(props: {
-  array: Selectors[],
-  addCheckedElement: (e: HTMLINputElement) => void
-}) {
+interface CheckListsProps {
+  array: Selectors[]
+  addCheckedElement: (e: HTMLInputElement) => void
+}
+
+export default function CheckLists(props: CheckListsProps) {
   const { array, addCheckedElement } = props
   return (
     <FormControl>
