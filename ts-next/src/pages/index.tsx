@@ -56,14 +56,17 @@ export default function Home() {
 			// ここでブラウザ側の読み込みの処理をしている
 			const reader = new FileReader()
 			reader.onload = () => {
-				if (!reader.result) return
-				// generateImage(reader.result)
-				const canvas = document.getElementById('canvas')
+				const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 				const ctx = canvas.getContext('2d')
-				let img = new Image()
-				img.src = reader.result
+				if (!ctx || !reader.result) return
+				let img: HTMLImageElement = new Image()
+				img.src = reader.result as string
 				img.onload = () => {
+					canvas.width = 1000
+					canvas.height = 500
 					ctx.drawImage(img, 0, 0)
+					ctx.fillStyle = "rgba(255,255,255, 0.5)"
+					ctx.fillRect(0, 0, 1000, 500);
 				}
 
 				// useStateに保存
