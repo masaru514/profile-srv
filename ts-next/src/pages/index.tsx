@@ -67,6 +67,11 @@ export default function Home() {
 					ctx.drawImage(img, 0, 0)
 					ctx.fillStyle = "rgba(255,255,255, 0.5)"
 					ctx.fillRect(0, 0, 1000, 500);
+					ctx.beginPath()
+
+					ctx.fillStyle = "rgba(0,0,0, 1)"
+					ctx.font = "64px ipaexg"
+					ctx.fillText("Hello World", 50, 200)
 				}
 
 				// useStateに保存
